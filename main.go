@@ -28,8 +28,7 @@ func main() {
 
 	p2p := p2p.DP2P{}
 	go p2p.Initialize(config)
-	go listen(&p2p)
-	chatter(&p2p)
+	listen(&p2p)
 }
 
 func chatter(p2p *p2p.DP2P) {
