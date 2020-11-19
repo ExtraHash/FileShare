@@ -12,7 +12,7 @@ import (
 
 func main() {
 	port := flag.Int("port", 10187, "--port 10187")
-	logLevel := flag.Int("log-level", 1, "--log-level 1")
+	logLevel := flag.Int("log-level", 0, "--log-level 0")
 	flag.Parse()
 
 	seeds := []p2p.Peer{
