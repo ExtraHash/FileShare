@@ -3,12 +3,17 @@ package main
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"encoding/json"
 	"flag"
-	"fmt"
+	"io/ioutil"
+	"log"
 	"time"
 
 	"github.com/ExtraHash/p2p"
 )
+
+var dataFolder = "data"
+var fileFolder = dataFolder + "/files"
 
 func main() {
 	port := flag.Int("port", 10187, "--port 10187")
@@ -26,9 +31,16 @@ func main() {
 		Seeds:     seeds,
 	}
 
+	db := db{}
+	db.initialize()
+
 	p2p := p2p.DP2P{}
 	go p2p.Initialize(config)
-	listen(&p2p)
+	go listen(&p2p, &db)
+
+	api := api{}
+	api.initialize(&p2p, &db)
+	api.run()
 }
 
 func chatter(p2p *p2p.DP2P) {
@@ -38,10 +50,25 @@ func chatter(p2p *p2p.DP2P) {
 	}
 }
 
-func listen(p2p *p2p.DP2P) {
+func listen(p2p *p2p.DP2P, db *db) {
 	for {
 		message := p2p.ReadMessage()
-		fmt.Println("received", string(message))
+
+		file := File{}
+		json.Unmarshal(message, &file)
+
+		checkFile := File{}
+		db.db.Find(&checkFile, "id = ?", file.ID)
+
+		if checkFile.ID == file.ID {
+			return
+		}
+
+		db.db.Create(&file)
+		err := ioutil.WriteFile(fileFolder+"/"+file.ID, file.Data, 0666)
+		if err != nil {
+			log.Print(err)
+		}
 	}
 }
 
