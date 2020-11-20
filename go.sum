@@ -34,6 +34,12 @@ github.com/ExtraHash/p2p v0.0.0-20201119204714-297e96fe0010 h1:VVhPNFBGUwGEEYkzk
 github.com/ExtraHash/p2p v0.0.0-20201119204714-297e96fe0010/go.mod h1:YVTUKhT+LNzf50wRTfY7buqhbboApw0VeTI5nrJl+kA=
 github.com/ExtraHash/p2p v0.0.0-20201119204957-a04572477612 h1:XPH44j8HqrAi9zAp6VJz5NWpCQ/zFN5CzGVr2pskMFg=
 github.com/ExtraHash/p2p v0.0.0-20201119204957-a04572477612/go.mod h1:YVTUKhT+LNzf50wRTfY7buqhbboApw0VeTI5nrJl+kA=
+github.com/ExtraHash/p2p v0.0.0-20201120024959-fa0a15dc1e04 h1:vI3QQ49PQGjt6k8HhswroFwZChn40wrbIU/2rg/WAx8=
+github.com/ExtraHash/p2p v0.0.0-20201120024959-fa0a15dc1e04/go.mod h1:YVTUKhT+LNzf50wRTfY7buqhbboApw0VeTI5nrJl+kA=
+github.com/ExtraHash/p2p v0.0.0-20201120025648-edcf45dae14c h1:gB5l2KOryzEuBO9r1ch56wNMy/SHdq726RkD4KJvax0=
+github.com/ExtraHash/p2p v0.0.0-20201120025648-edcf45dae14c/go.mod h1:YVTUKhT+LNzf50wRTfY7buqhbboApw0VeTI5nrJl+kA=
+github.com/ExtraHash/p2p v0.0.0-20201120030945-710a577dd775 h1:ebnkGtQxNnV9Mm0uaQMLWKW4xKiQ45uH3r5Mnl4j03s=
+github.com/ExtraHash/p2p v0.0.0-20201120030945-710a577dd775/go.mod h1:YVTUKhT+LNzf50wRTfY7buqhbboApw0VeTI5nrJl+kA=
 github.com/felixge/httpsnoop v1.0.1 h1:lvB5Jl89CsZtGIWuTcDM1E/vkVs49/Ml7JJe07l8SPQ=
 github.com/felixge/httpsnoop v1.0.1/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
 github.com/golang/protobuf v1.3.1 h1:YF8+flBXS5eO826T4nzqPrxfhQThhXl0YzfuUPu4SBg=
