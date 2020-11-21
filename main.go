@@ -18,6 +18,7 @@ var fileFolder = dataFolder + "/files"
 func main() {
 	port := flag.Int("port", 10187, "--port 10187")
 	logLevel := flag.Int("log-level", 0, "--log-level 0")
+	testChatter := flag.Bool("chatter", false, "--chatter")
 	flag.Parse()
 
 	seeds := []p2p.Peer{
@@ -37,6 +38,10 @@ func main() {
 	p2p := p2p.DP2P{}
 	go p2p.Initialize(config)
 	go listen(&p2p, &db)
+
+	if *testChatter {
+		go chatter(&p2p)
+	}
 
 	api := api{}
 	api.initialize(&p2p, &db)
