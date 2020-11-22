@@ -13,6 +13,7 @@ import (
 	"github.com/ExtraHash/p2p"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -23,6 +24,8 @@ type api struct {
 	messages   *chan []byte
 	p2p        *p2p.DP2P
 	db         *db
+	sockets    []*websocket.Conn
+	socketMu   sync.Mutex
 }
 
 func (a *api) initialize(p2p *p2p.DP2P, db *db) {
@@ -55,6 +58,7 @@ func (a *api) getRouter() {
 	a.router.Handle("/file", a.FileHandler()).Methods("POST")
 	a.router.Handle("/file/{fileID}", a.FileHandler()).Methods("GET")
 	a.router.Handle("/file", a.FileListHandler()).Methods("GET")
+	a.router.Handle("/socket", a.SocketHandler()).Methods("GET")
 }
 
 // GetIP from http request
@@ -96,7 +100,6 @@ func (a *api) FileHandler() http.Handler {
 				res.WriteHeader(500)
 				break
 			}
-			res.Header().Set("Content-Disposition", "attachment; filename="+file.FileName)
 			res.WriteHeader(200)
 			res.Write(fileB)
 		case "POST":
@@ -145,6 +148,36 @@ func (a *api) FileHandler() http.Handler {
 	})
 }
 
+// SocketHandler handles the websocket connection messages and responses.
+func (a *api) SocketHandler() http.Handler {
+	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		var upgrader = websocket.Upgrader{
+			ReadBufferSize:  1024,
+			WriteBufferSize: 1024,
+		}
+
+		upgrader.CheckOrigin = func(req *http.Request) bool { return true }
+
+		conn, err := upgrader.Upgrade(res, req, nil)
+		if err != nil {
+			log.Print(err)
+			return
+		}
+
+		a.sockets = append(a.sockets, conn)
+		log.Print("New socket opened, open socket count: " + strconv.Itoa(len(a.sockets)))
+
+		for {
+			_, _, err := conn.ReadMessage()
+
+			if err != nil {
+				log.Print(err)
+				break
+			}
+		}
+	})
+}
+
 // FileHandler handles the file endpoint.
 func (a *api) FileListHandler() http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -163,4 +196,28 @@ func (a *api) FileListHandler() http.Handler {
 		res.WriteHeader(200)
 		res.Write(fileB)
 	})
+}
+
+func (a *api) removeSocket(conn *websocket.Conn) {
+	a.socketMu.Lock()
+	defer a.socketMu.Unlock()
+
+	for i, c := range a.sockets {
+		if conn == c {
+			a.sockets = append(a.sockets[:i], a.sockets[i+1:]...)
+			break
+		}
+	}
+}
+
+func (a *api) emit(data []byte) {
+	a.socketMu.Lock()
+	defer a.socketMu.Unlock()
+	log.Print("reached emit()")
+	for _, conn := range a.sockets {
+		log.Print(conn)
+		if conn != nil {
+			conn.WriteMessage(websocket.BinaryMessage, data)
+		}
+	}
 }

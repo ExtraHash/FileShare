@@ -37,7 +37,6 @@ func main() {
 
 	p2p := p2p.DP2P{}
 	go p2p.Initialize(config)
-	go listen(&p2p, &db)
 
 	if *testChatter {
 		go chatter(&p2p)
@@ -45,6 +44,7 @@ func main() {
 
 	api := api{}
 	api.initialize(&p2p, &db)
+	go listen(&p2p, &db, &api)
 	api.run()
 }
 
@@ -55,9 +55,10 @@ func chatter(p2p *p2p.DP2P) {
 	}
 }
 
-func listen(p2p *p2p.DP2P, db *db) {
+func listen(p2p *p2p.DP2P, db *db, api *api) {
 	for {
 		message := p2p.ReadMessage()
+		api.emit(message)
 
 		file := File{}
 		json.Unmarshal(message, &file)
@@ -66,7 +67,7 @@ func listen(p2p *p2p.DP2P, db *db) {
 		db.db.Find(&checkFile, "id = ?", file.ID)
 
 		if checkFile.ID == file.ID {
-			return
+			continue
 		}
 
 		db.db.Create(&file)
