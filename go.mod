@@ -3,7 +3,7 @@ module github.com/ExtraHash/FileShare
 go 1.15
 
 require (
-	github.com/ExtraHash/p2p v0.0.0-20201121090106-1cc793a52424
+	github.com/ExtraHash/p2p v0.0.0-20201123223051-67a3974fc3ed
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/websocket v1.4.2

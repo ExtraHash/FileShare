@@ -171,6 +171,7 @@ func (a *api) SocketHandler() http.Handler {
 			_, _, err := conn.ReadMessage()
 
 			if err != nil {
+				a.removeSocket(conn)
 				log.Print(err)
 				break
 			}
@@ -213,9 +214,7 @@ func (a *api) removeSocket(conn *websocket.Conn) {
 func (a *api) emit(data []byte) {
 	a.socketMu.Lock()
 	defer a.socketMu.Unlock()
-	log.Print("reached emit()")
 	for _, conn := range a.sockets {
-		log.Print(conn)
 		if conn != nil {
 			conn.WriteMessage(websocket.BinaryMessage, data)
 		}

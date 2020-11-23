@@ -114,6 +114,8 @@ github.com/ExtraHash/p2p v0.0.0-20201121085016-f5d819d4726d h1:qZOuCXGYqr03BJNKb
 github.com/ExtraHash/p2p v0.0.0-20201121085016-f5d819d4726d/go.mod h1:YVTUKhT+LNzf50wRTfY7buqhbboApw0VeTI5nrJl+kA=
 github.com/ExtraHash/p2p v0.0.0-20201121090106-1cc793a52424 h1:LwiZzjYgVtSAhFsoFPRRmG5xweB5OWIKPMiQoqA+JzQ=
 github.com/ExtraHash/p2p v0.0.0-20201121090106-1cc793a52424/go.mod h1:YVTUKhT+LNzf50wRTfY7buqhbboApw0VeTI5nrJl+kA=
+github.com/ExtraHash/p2p v0.0.0-20201123223051-67a3974fc3ed h1:Q8JrND9zlHfpLmn0kib9fu9z2qhy5Ys3o7uJTQvHM68=
+github.com/ExtraHash/p2p v0.0.0-20201123223051-67a3974fc3ed/go.mod h1:YVTUKhT+LNzf50wRTfY7buqhbboApw0VeTI5nrJl+kA=
 github.com/felixge/httpsnoop v1.0.1 h1:lvB5Jl89CsZtGIWuTcDM1E/vkVs49/Ml7JJe07l8SPQ=
 github.com/felixge/httpsnoop v1.0.1/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
 github.com/golang/protobuf v1.3.1 h1:YF8+flBXS5eO826T4nzqPrxfhQThhXl0YzfuUPu4SBg=

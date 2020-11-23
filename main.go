@@ -3,10 +3,8 @@ package main
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"encoding/json"
 	"flag"
-	"io/ioutil"
-	"log"
+	"fmt"
 	"time"
 
 	"github.com/ExtraHash/p2p"
@@ -59,22 +57,7 @@ func listen(p2p *p2p.DP2P, db *db, api *api) {
 	for {
 		message := p2p.ReadMessage()
 		api.emit(message)
-
-		file := File{}
-		json.Unmarshal(message, &file)
-
-		checkFile := File{}
-		db.db.Find(&checkFile, "id = ?", file.ID)
-
-		if checkFile.ID == file.ID {
-			continue
-		}
-
-		db.db.Create(&file)
-		err := ioutil.WriteFile(fileFolder+"/"+file.ID, file.Data, 0666)
-		if err != nil {
-			log.Print(err)
-		}
+		fmt.Println(string(message))
 	}
 }
 
