@@ -20,7 +20,7 @@ func main() {
 	flag.Parse()
 
 	seeds := []p2p.Peer{
-		{Host: "10.0.0.148", Port: 10187, SignKey: "c2bc4d085b46c61bfabf7e0c2809d7aba7421ad9057148d9831c2463a2b61f80"},
+		{Host: "lbserver1.ddns.net", Port: 10187, SignKey: "c2bc4d085b46c61bfabf7e0c2809d7aba7421ad9057148d9831c2463a2b61f80"},
 	}
 
 	config := p2p.NetworkConfig{
