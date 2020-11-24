@@ -20,9 +20,10 @@ type apiModel struct {
 }
 
 type FileMessage struct {
-	Type string `json:"type"`
-	ID   string `json:"id"`
-	File File   `json:"file"`
+	Type string    `json:"type"`
+	ID   string    `json:"id"`
+	File File      `json:"file"`
+	Time time.Time `json:"time"`
 }
 
 // File is an uploaded file

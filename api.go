@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -9,6 +10,7 @@ import (
 	"os"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/ExtraHash/p2p"
 	"github.com/gorilla/handlers"
@@ -139,16 +141,16 @@ func (a *api) FileHandler() http.Handler {
 			}
 
 			fileMessage := FileMessage{
-				Type: "File",
+				Type: "file",
 				ID:   uuid.NewV4().String(),
 				File: newFile,
+				Time: time.Now(),
 			}
 
 			broadcastB, err := json.Marshal(fileMessage)
 			a.db.db.Create(&newFile)
-
-			a.p2p.Broadcast(broadcastB)
 			res.WriteHeader(200)
+			a.p2p.Broadcast(broadcastB)
 		}
 
 	})
@@ -174,15 +176,51 @@ func (a *api) SocketHandler() http.Handler {
 		log.Print("New socket opened, open socket count: " + strconv.Itoa(len(a.sockets)))
 
 		for {
-			_, _, err := conn.ReadMessage()
+			_, msg, err := conn.ReadMessage()
 
 			if err != nil {
 				a.removeSocket(conn)
 				log.Print(err)
 				break
 			}
+
+			message := Message{}
+			err = json.Unmarshal(msg, &message)
+			if err != nil {
+				a.removeSocket(conn)
+				log.Print(err)
+				break
+			}
+
+			if message.Time.IsZero() {
+				message.Time = time.Now()
+			}
+
+			fmt.Println(message)
+
+			switch message.Type {
+			case "message":
+				byteB, err := json.Marshal(&message)
+				if err != nil {
+					a.removeSocket(conn)
+					log.Print(err)
+					break
+				}
+				a.p2p.Broadcast(byteB)
+			default:
+				log.Println("Unsupported message.")
+				log.Println(string(msg))
+			}
 		}
 	})
+}
+
+type Message struct {
+	Username string    `json:"username"`
+	Type     string    `json:"type"`
+	Text     string    `json:"text"`
+	ID       string    `json:"id"`
+	Time     time.Time `json:"time"`
 }
 
 // FileHandler handles the file endpoint.
