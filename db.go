@@ -19,14 +19,10 @@ type apiModel struct {
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 }
 
-type Message struct {
+type FileMessage struct {
 	Type string `json:"type"`
 	ID   string `json:"id"`
-}
-
-type FileMessage struct {
-	Message
-	File File `json:"file"`
+	File File   `json:"file"`
 }
 
 // File is an uploaded file

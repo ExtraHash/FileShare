@@ -138,7 +138,13 @@ func (a *api) FileHandler() http.Handler {
 				Data:     fileBytes,
 			}
 
-			broadcastB, err := json.Marshal(newFile)
+			fileMessage := FileMessage{
+				Type: "File",
+				ID:   uuid.NewV4().String(),
+				File: newFile,
+			}
+
+			broadcastB, err := json.Marshal(fileMessage)
 			a.db.db.Create(&newFile)
 
 			a.p2p.Broadcast(broadcastB)
