@@ -140,11 +140,13 @@ func (a *api) FileHandler() http.Handler {
 				Data:     fileBytes,
 			}
 
-			fileMessage := FileMessage{
-				Type: "file",
-				ID:   uuid.NewV4().String(),
-				File: newFile,
-				Time: time.Now(),
+			fileMessage := Message{
+				Username: "Anonymous",
+				Type:     "message",
+				Text:     "",
+				ID:       uuid.NewV4().String(),
+				Time:     time.Now(),
+				File:     newFile,
 			}
 
 			broadcastB, err := json.Marshal(fileMessage)
@@ -215,12 +217,14 @@ func (a *api) SocketHandler() http.Handler {
 	})
 }
 
+// Message is a chat message
 type Message struct {
 	Username string    `json:"username"`
 	Type     string    `json:"type"`
 	Text     string    `json:"text"`
 	ID       string    `json:"id"`
 	Time     time.Time `json:"time"`
+	File     File      `json:"file"`
 }
 
 // FileHandler handles the file endpoint.
