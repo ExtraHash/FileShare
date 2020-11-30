@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"time"
@@ -52,6 +53,15 @@ func chatter(p2p *p2p.DP2P) {
 	for {
 		time.Sleep(5 * time.Second)
 		p2p.Broadcast(randomData())
+
+		peerList := p2p.GetPeerList()
+		for _, peer := range peerList {
+			fmt.Println(peer.Host, peer.SignKey)
+
+			if peer.SignKey == "3620fa21d71c56ff384647b73382504fc48d6d89a3cb9c946cc580891950b447" {
+				fmt.Println(p2p.Whisper([]byte("hello world"), peer.SignKey))
+			}
+		}
 	}
 }
 
