@@ -1,9 +1,9 @@
-module github.com/ExtraHash/FileShare
+module github.com/ExtraHash/dchat
 
 go 1.15
 
 require (
-	github.com/ExtraHash/p2p v0.0.0-20201124024843-58bb9351a9ac
+	github.com/ExtraHash/p2p v0.0.0-20201130232245-2160e1af0cc6
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/websocket v1.4.2

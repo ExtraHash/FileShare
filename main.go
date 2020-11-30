@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"flag"
+	"fmt"
 	"time"
 
 	"github.com/ExtraHash/p2p"
@@ -56,6 +57,12 @@ func listen(p2p *p2p.DP2P, db *db, api *api) {
 	for {
 		message := p2p.ReadMessage()
 		api.emit(message)
+
+		peers := p2p.GetPeerList()
+
+		for _, peer := range peers {
+			fmt.Println(peer.Host, peer.Direction, peer.SignKey)
+		}
 	}
 }
 

@@ -209,6 +209,10 @@ func (a *api) SocketHandler() http.Handler {
 					break
 				}
 				a.p2p.Broadcast(byteB)
+			case "ping":
+				pong := Message{Type: "pong"}
+				bytePong, _ := json.Marshal(pong)
+				conn.WriteMessage(websocket.BinaryMessage, bytePong)
 			default:
 				log.Println("Unsupported message.")
 				log.Println(string(msg))
