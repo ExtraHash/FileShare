@@ -3,11 +3,8 @@ package main
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"time"
 
 	"github.com/ExtraHash/p2p"
@@ -23,7 +20,7 @@ func main() {
 	flag.Parse()
 
 	seeds := []p2p.Peer{
-		{Host: "10.0.0.148", Port: 10187, SignKey: "c2bc4d085b46c61bfabf7e0c2809d7aba7421ad9057148d9831c2463a2b61f80"},
+		{Host: "lbserver1.ddns.net", Port: 10187, SignKey: "c2bc4d085b46c61bfabf7e0c2809d7aba7421ad9057148d9831c2463a2b61f80"},
 	}
 
 	config := p2p.NetworkConfig{
@@ -69,22 +66,6 @@ func listen(p2p *p2p.DP2P, db *db, api *api) {
 	for {
 		message := p2p.ReadMessage()
 		api.emit(message)
-
-		file := File{}
-		json.Unmarshal(message, &file)
-
-		checkFile := File{}
-		db.db.Find(&checkFile, "id = ?", file.ID)
-
-		if checkFile.ID == file.ID {
-			continue
-		}
-
-		db.db.Create(&file)
-		err := ioutil.WriteFile(fileFolder+"/"+file.ID, file.Data, 0666)
-		if err != nil {
-			log.Print(err)
-		}
 	}
 }
 

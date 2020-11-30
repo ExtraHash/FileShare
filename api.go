@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -9,6 +10,7 @@ import (
 	"os"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/ExtraHash/p2p"
 	"github.com/gorilla/handlers"
@@ -138,11 +140,19 @@ func (a *api) FileHandler() http.Handler {
 				Data:     fileBytes,
 			}
 
-			broadcastB, err := json.Marshal(newFile)
-			a.db.db.Create(&newFile)
+			fileMessage := Message{
+				Username: "Anonymous",
+				Type:     "message",
+				Text:     "",
+				ID:       uuid.NewV4().String(),
+				Time:     time.Now(),
+				File:     newFile,
+			}
 
-			a.p2p.Broadcast(broadcastB)
+			broadcastB, err := json.Marshal(fileMessage)
+			a.db.db.Create(&newFile)
 			res.WriteHeader(200)
+			a.p2p.Broadcast(broadcastB)
 		}
 
 	})
@@ -168,14 +178,53 @@ func (a *api) SocketHandler() http.Handler {
 		log.Print("New socket opened, open socket count: " + strconv.Itoa(len(a.sockets)))
 
 		for {
-			_, _, err := conn.ReadMessage()
+			_, msg, err := conn.ReadMessage()
 
 			if err != nil {
+				a.removeSocket(conn)
 				log.Print(err)
 				break
 			}
+
+			message := Message{}
+			err = json.Unmarshal(msg, &message)
+			if err != nil {
+				a.removeSocket(conn)
+				log.Print(err)
+				break
+			}
+
+			if message.Time.IsZero() {
+				message.Time = time.Now()
+			}
+
+			fmt.Println(message)
+
+			switch message.Type {
+			case "message":
+				byteB, err := json.Marshal(&message)
+				if err != nil {
+					a.removeSocket(conn)
+					log.Print(err)
+					break
+				}
+				a.p2p.Broadcast(byteB)
+			default:
+				log.Println("Unsupported message.")
+				log.Println(string(msg))
+			}
 		}
 	})
+}
+
+// Message is a chat message
+type Message struct {
+	Username string    `json:"username"`
+	Type     string    `json:"type"`
+	Text     string    `json:"text"`
+	ID       string    `json:"id"`
+	Time     time.Time `json:"time"`
+	File     File      `json:"file"`
 }
 
 // FileHandler handles the file endpoint.
@@ -213,9 +262,7 @@ func (a *api) removeSocket(conn *websocket.Conn) {
 func (a *api) emit(data []byte) {
 	a.socketMu.Lock()
 	defer a.socketMu.Unlock()
-	log.Print("reached emit()")
 	for _, conn := range a.sockets {
-		log.Print(conn)
 		if conn != nil {
 			conn.WriteMessage(websocket.BinaryMessage, data)
 		}
