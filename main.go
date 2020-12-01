@@ -38,12 +38,24 @@ func main() {
 
 	if *testChatter {
 		go chatter(&p2p)
+		go peerListLog(&p2p)
 	}
 
 	api := api{}
 	api.initialize(&p2p, &db)
 	go listen(&p2p, &db, &api)
 	api.run()
+}
+
+func peerListLog(p2p *p2p.DP2P) {
+	for {
+		time.Sleep(30 * time.Second)
+		peerList := p2p.GetPeerList()
+		fmt.Println("peers:")
+		for _, peer := range peerList {
+			fmt.Println(peer.Host, peer.Direction, peer.SignKey)
+		}
+	}
 }
 
 func chatter(p2p *p2p.DP2P) {
@@ -56,7 +68,7 @@ func chatter(p2p *p2p.DP2P) {
 func listen(p2p *p2p.DP2P, db *db, api *api) {
 	for {
 		message := p2p.ReadMessage()
-		fmt.Println(string(message))
+		fmt.Println("decrypted:", string(message))
 		api.emit(message)
 	}
 }

@@ -2,6 +2,8 @@ github.com/ExtraHash/p2p v0.0.0-20201130232245-2160e1af0cc6 h1:foBMCU/6yvS9kkALB
 github.com/ExtraHash/p2p v0.0.0-20201130232245-2160e1af0cc6/go.mod h1:YVTUKhT+LNzf50wRTfY7buqhbboApw0VeTI5nrJl+kA=
 github.com/ExtraHash/p2p v0.0.0-20201130233145-05d21c562fda h1:wgDytJvVUfe+isGPhwUSNRPyIj8qiq9zTSVD/TPMlsY=
 github.com/ExtraHash/p2p v0.0.0-20201130233145-05d21c562fda/go.mod h1:YVTUKhT+LNzf50wRTfY7buqhbboApw0VeTI5nrJl+kA=
+github.com/ExtraHash/p2p v0.0.0-20201201001614-76d1f429dd33 h1:7087pjKCHXNtzi55DUw/lS+gPtA31DKUNDSNbxjgnvs=
+github.com/ExtraHash/p2p v0.0.0-20201201001614-76d1f429dd33/go.mod h1:YVTUKhT+LNzf50wRTfY7buqhbboApw0VeTI5nrJl+kA=
 github.com/felixge/httpsnoop v1.0.1 h1:lvB5Jl89CsZtGIWuTcDM1E/vkVs49/Ml7JJe07l8SPQ=
 github.com/felixge/httpsnoop v1.0.1/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
 github.com/golang/protobuf v1.3.1 h1:YF8+flBXS5eO826T4nzqPrxfhQThhXl0YzfuUPu4SBg=
