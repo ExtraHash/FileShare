@@ -68,14 +68,6 @@ func chatter(p2p *p2p.DP2P) {
 	}
 }
 
-func listenWhisper(p2p *p2p.DP2P, db *db, api *api) {
-	for {
-		message := p2p.ReadWhisper()
-		fmt.Println("whisper:", string(message))
-		api.emit(message)
-	}
-}
-
 func listen(p2p *p2p.DP2P, db *db, api *api) {
 	for {
 		message := p2p.ReadMessage()
