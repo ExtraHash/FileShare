@@ -62,9 +62,6 @@ func chatter(p2p *p2p.DP2P) {
 	for {
 		time.Sleep(5 * time.Second)
 		p2p.Broadcast(randomData())
-		for _, peer := range p2p.GetPeerList() {
-			p2p.Whisper([]byte("henlo friend"), peer.SignKey)
-		}
 	}
 }
 
