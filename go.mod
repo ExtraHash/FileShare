@@ -3,7 +3,7 @@ module github.com/ExtraHash/dchat
 go 1.15
 
 require (
-	github.com/ExtraHash/p2p v0.0.0-20201201004616-d1e77a45d50b
+	github.com/ExtraHash/p2p v0.0.0-20201201025402-dc453213f5d9
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/websocket v1.4.2
